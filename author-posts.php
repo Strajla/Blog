@@ -1,4 +1,11 @@
+<?php 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+include("db.php"); 
+
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,34 +24,20 @@
     <!-- Custom styles for this template -->
     <link href="styles/blog.css" rel="stylesheet">
     <link href="styles/styles.css" rel="stylesheet">
-
+       
 </head>
 
-<body>
+<?php
 
-<?php include("header.php"); ?>
+    $postId = $_GET['post_id'];
+    $sql = "SELECT posts.id as id, posts.title as title, posts.created_at as created_at, posts.body as body, users.First_Name as First_Name, users.Last_Name as Last_Name
+    FROM posts JOIN users ON posts.user_id = users.id WHERE posts.id = {$postId};";
 
-<main role="main" class="container">
+    $statement = $connection->prepare($sql);
 
-    <div class="row">
+    $statement->execute();
 
-        <div class="col-sm-8 blog-main">
+    $statement->setFetchMode(PDO::FETCH_ASSOC);
 
-            <?php include('posts.php'); ?>
-
-            <!-- <nav class="blog-pagination">
-                <a class="btn btn-outline-primary" href="#">Older</a>
-                <a class="btn btn-outline-secondary disabled" href="#">Newer</a>
-            </nav> -->
-
-</div><!-- /.blog-main -->
-
-<?php include('sidebar.php'); ?><!-- /.blog-sidebar -->
-
-    </div><!-- /.row -->
-
-</main><!-- /.container -->
-
-<?php include('footer.php'); ?>
-</body>
-</html>
+    $singlePost = $statement->fetchAll()[0];
+?>
