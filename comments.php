@@ -2,20 +2,19 @@
 
 <?php
 
-// pripremamo upit
+
 $sqlComments = "SELECT posts.id, comments.id, comments.author, comments.post_id, comments.text
 FROM posts JOIN comments ON comments.post_id = posts.id WHERE posts.id = {$_GET['post_id']}";
 
 $statementComments = $connection->prepare($sqlComments);
 
-// izvrsavamo upit
+
 $statementComments->execute();
 
-// zelimo da se rezultat vrati kao asocijativni niz.
-// ukoliko izostavimo ovu liniju, vratice nam se obican, numerisan niz
+
 $statementComments->setFetchMode(PDO::FETCH_ASSOC);
 
-// punimo promenjivu sa rezultatom upita
+
 $comments = $statementComments->fetchAll();
 
 ?>
